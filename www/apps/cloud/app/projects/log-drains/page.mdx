@@ -172,6 +172,23 @@ You can't download the key file again after creating it, so store it securely. R
 
 For a generic OTLP provider, find the provider's OTLP HTTP logs endpoint, which ends with `/v1/logs`, and the authentication header it expects in the provider's OpenTelemetry documentation. Most providers expect an `Authorization` header or a vendor-specific API key header.
 
+### Setup OTLP Logs in Axiom
+
+Axiom accepts OTLP logs over HTTP. Select **Other** as the provider, then create a dataset and an API token in Axiom:
+
+1. In Axiom, go to **Settings** > **Datasets and views**, and click **New dataset**. Select the **Events** kind, enter a name, then click **Save dataset**.
+2. Go to **Settings** > **API tokens**, and click **New API token**. In **Token permissions**, click **Basic**. In **Dataset access**, select the dataset you created, then click **Create**.
+3. Copy the API token. Axiom shows it only once.
+
+Back in the [Configure the Log Drain](#step-2-configure-the-log-drain) form, set the OTLP URL to `https://<AXIOM_DOMAIN>/v1/logs`. `<AXIOM_DOMAIN>` is the edge domain of your dataset's region, such as `us-east-1.aws.edge.axiom.co` or `eu-central-1.aws.edge.axiom.co`. Then, add two headers:
+
+- `Authorization` with the value `Bearer <token>`, where `<token>` is the API token you copied.
+- `X-Axiom-Dataset` with the name of the dataset you created.
+
+Once you save the log drain and redeploy the log drain's environments, you can start seeing logs in Axiom by going to **Query** and selecting your dataset.
+
+Refer to [Axiom's OpenTelemetry documentation](https://axiom.co/docs/send-data/opentelemetry) for more details.
+
 ---
 
 ## View and Edit a Log Drain
